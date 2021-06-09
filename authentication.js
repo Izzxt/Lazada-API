@@ -1,4 +1,5 @@
 'use strict';
+const { env } = require('./sign/signature');
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
@@ -9,7 +10,7 @@ const getAccessToken = async (z, bundle) => {
       uuid: 38284839234,
       app_key: process.env.CLIENT_ID,
       sign_method: 'sha256',
-      timestamp: 1623220257000,
+      timestamp: env.timest,
       sign: '9E52E047C5FFEAF552609EECF7E00DEA3A46B5E16B6E9B04B03D0B1F4C7C60D4'
 
       // Extra data can be pulled from the querystring. For instance:
@@ -39,7 +40,7 @@ const refreshAccessToken = async (z, bundle) => {
       app_key: process.env.CLIENT_ID,
       sign_method: 'sha256',
       access_token: bundle.authData.access_token,
-      timestamp: 1623220257000,
+      timestamp: env.timest,
       sign: '9E52E047C5FFEAF552609EECF7E00DEA3A46B5E16B6E9B04B03D0B1F4C7C60D4'
     },
     headers: { 'content-type': 'application/json' },
