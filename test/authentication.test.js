@@ -47,7 +47,7 @@ describe('oauth2 app', () => {
     );
 
     expect(authorizeUrl).toBe(
-      'https://auth.lazada.com/oauth/authorize?response_type=code&force_auth=true&redirect_uri=https%3A%2F%2Fzapier.com%2Fdashboard%2Fauth%2Foauth%2Freturn%2FApp138396CLIAPI%2F&client_id=101736'
+      'https://api.lazada.com.my/oauth/authorize?response_type=code&force_auth=true&redirect_uri=https%3A%2F%2Fzapier.com%2Fdashboard%2Fauth%2Foauth%2Freturn%2FApp138396CLIAPI%2F&client_id=101736'
     );
   });
 
