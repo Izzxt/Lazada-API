@@ -1,17 +1,16 @@
 'use strict';
-const { env } = require('./sign/signature');
+const { env, signature } = require('./sign/signature');
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://auth.lazada.com/rest/auth/token/create',
+    url: 'https://api.lazada.com.my/rest/auth/token/create',
     method: 'POST',
     body: {
       code: bundle.inputData.code,
-      uuid: 38284839234,
       app_key: process.env.CLIENT_ID,
       sign_method: 'sha256',
       timestamp: env.timest,
-      sign: '9E52E047C5FFEAF552609EECF7E00DEA3A46B5E16B6E9B04B03D0B1F4C7C60D4'
+      sign: signature
 
       // Extra data can be pulled from the querystring. For instance:
       // 'accountDomain': bundle.cleanedRequest.querystring.accountDomain
@@ -21,7 +20,9 @@ const getAccessToken = async (z, bundle) => {
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
   // or verify response.status === 200 before you continue.
-
+  if (!response.status !== 200) {
+    throw new Error('Unable to fetch access token: ' + response.content);
+  }
   // This function should return `access_token`.
   // If your app does an app refresh, then `refresh_token` should be returned here
   // as well
@@ -33,7 +34,7 @@ const getAccessToken = async (z, bundle) => {
 
 const refreshAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://auth.lazada.com/rest/auth/token/refresh',
+    url: 'https://api.lazada.com.my/rest/auth/token/refresh',
     method: 'POST',
     body: {
       refresh_token: bundle.authData.refresh_token,
@@ -41,14 +42,16 @@ const refreshAccessToken = async (z, bundle) => {
       sign_method: 'sha256',
       access_token: bundle.authData.access_token,
       timestamp: env.timest,
-      sign: '9E52E047C5FFEAF552609EECF7E00DEA3A46B5E16B6E9B04B03D0B1F4C7C60D4'
+      sign: signature
     },
     headers: { 'content-type': 'application/json' },
   });
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
   // or verify response.status === 200 before you continue.
-
+  if (!response.status !== 200) {
+    throw new Error('Unable to fetch access token: ' + response.content);
+  }
   // This function should return `access_token`.
   // If the refresh token stays constant, no need to return it.
   // If the refresh token does change, return it here to update the stored value in
@@ -84,7 +87,7 @@ module.exports = {
     type: 'oauth2',
     oauth2Config: {
       authorizeUrl: {
-        url: 'https://auth.lazada.com/oauth/authorize',
+        url: 'https://api.lazada.com.my/oauth/authorize',
         params: {
           response_type: 'code',
           force_auth: true,
