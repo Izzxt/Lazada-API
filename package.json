@@ -7,7 +7,9 @@
     "test": "jest --testTimeout 10000"
   },
   "dependencies": {
+    "crpyto-js": "^0.0.1-security",
     "crypto-js": "^4.0.0",
+    "js-sha256": "^0.9.0",
     "lazada-open-platform-sdk": "^2.0.0-0",
     "zapier-platform-core": "11.0.1"
   },
