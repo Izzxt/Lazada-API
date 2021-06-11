@@ -15,7 +15,7 @@ const getAccessToken = async (z, bundle) => {
       // Extra data can be pulled from the querystring. For instance:
       // 'accountDomain': bundle.cleanedRequest.querystring.accountDomain
     },
-    headers: { 'content-type': 'application/json' },
+    headers: { 'accept': 'application/json' },
   });
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
@@ -44,7 +44,7 @@ const refreshAccessToken = async (z, bundle) => {
       timestamp: env.timest,
       sign: signature
     },
-    headers: { 'content-type': 'application/json' },
+    headers: { 'accept': 'application/json' },
   });
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
