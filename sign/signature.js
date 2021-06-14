@@ -1,4 +1,5 @@
-const CryptoJS = require("crypto-js");
+const LazadaRequest = require('lazada-open-platform-sdk/lib/LazadaRequest/signature');
+const crypto = require('crypto');
 
 const d = new Date();
 const time = d.getTime();
@@ -10,27 +11,26 @@ const env = {
     timest: time
 }
 
-const string = [
-    `app_key${env.app_key}`,
-    `timestamp${env.timest}`,
-    'sign_methodsha256'
-]
+var params = {
+    app_key: `${env.app_key}`,
+    timestamp: `${env.timest}`,
+    sign_method: 'sha256',
+    code: '0_101736_0NowvOW8BTW6bQzKu1hnVqNT25402'
+}
 
-var concatString = string[0].concat(string[1], string[2]);
+LazadaRequest.signRequest("101736", "/auth/token/create", params)
 
-exports.encryptMessage = (path) =>
-    new Promise((resolve, reject) => {
-        const encryptMessage = CryptoJS.HmacSHA256(path, env.app_key).toString(
-            CryptoJS.enc.Hex,
-        );
+const keysortParams = LazadaRequest.keysort(params);
 
-        let sign = encryptMessage.toUpperCase();
+const concatString = LazadaRequest.concatDictionaryKeyValue(keysortParams);
 
-        return resolve(sign);
-    });
+const preSignString = env.path + concatString
 
-let signature = this.encryptMessage(`${env.path}${concatString}`);
+const hash = crypto.createHmac('sha256', env.app_secret).update(preSignString).digest('hex')
 
-console.log(signature);
+const signature = hash.toUpperCase();
 
-module.exports = { env, signature };
+console.log(signature)
+console.log(env.timest)
+
+module.exports = { env, signature }
