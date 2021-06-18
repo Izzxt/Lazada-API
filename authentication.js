@@ -3,7 +3,7 @@ const { env, signature } = require('./sign/signature');
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://api.lazada.com.my/rest/auth/token/create',
+    url: 'https://api.lazada.com/rest/auth/token/create',
     method: 'POST',
     body: {
       code: bundle.inputData.code,
@@ -34,7 +34,7 @@ const getAccessToken = async (z, bundle) => {
 
 const refreshAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://api.lazada.com.my/rest/auth/token/refresh',
+    url: 'https://api.lazada.com/rest/auth/token/refresh',
     method: 'POST',
     body: {
       refresh_token: bundle.authData.refresh_token,
@@ -87,12 +87,11 @@ module.exports = {
     type: 'oauth2',
     oauth2Config: {
       authorizeUrl: {
-        url: 'https://api.lazada.com.my/oauth/authorize',
+        url: 'https://auth.lazada.com/oauth/authorize',
         params: {
+          app_key: '{{process.env.CLIENT_ID}}',
           response_type: 'code',
-          force_auth: true,
           redirect_uri: '{{bundle.inputData.redirect_uri}}',
-          client_id: '{{process.env.CLIENT_ID}}',
         },
       },
       getAccessToken,
